@@ -34,12 +34,16 @@ export class ResourceList extends React.Component<IResourceListProps, any> {
             onSelectionChanged: () => {
                 console.log(this._selection.getSelection());
                 
-                //this.props.onResourceSelectionChange(this._selection.getSelection() as Resource[]);
+                this.props.onResourceSelectionChange(this._selection.getSelection() as Resource[]);
             }
             });
         
         this._selection.setItems(this.props.resources);
         
+    }
+
+    componentWillReceiveProps(props: IResourceListProps){
+        this._selection.setItems(props.resources, false);
     }
     
     private _onRenderCell(nestingDepth?: number, item?: Resource, index?: number): JSX.Element{

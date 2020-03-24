@@ -20,34 +20,28 @@ class App extends React.Component<void, IAppState> {
       resources: [],
       selectedResources: []     
     }
-    ResourceService.getResources().then(resources => {
-      this.setState( {
-        resources: resources,
-      });
+    ResourceService.getResources().then(r => {
+      this.setState({resources: r});
     });
   }
 
   render(){
     return (
       <div className="App">
-        {/* <ResourceList
+         <ResourceList
           resources = {this.state.resources}
           onResourceSelectionChange = {(resources => this.onSelectedResourcesChange(resources))}
-
         />
-        <BookingResourceList
-          selectedResources = {this.state.selectedResources }
-        /> */}
-        <SelectionTestComponent resources={this.state.resources}></SelectionTestComponent>
+        <BookingResourceList 
+        selectedResources={this.state.selectedResources}
+        />
       </div>
     );
   }
 
   onSelectedResourcesChange(resources: Resource[]){
-    console.log("Resources changed");
-    console.log(resources);
     this.setState({
-        selectedResources: resources
+        selectedResources: resources,
     })
   }
 }

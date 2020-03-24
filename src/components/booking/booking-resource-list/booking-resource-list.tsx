@@ -8,7 +8,9 @@ interface IBookingResourceListProps {
 
 function BookingResourceList(props: IBookingResourceListProps): JSX.Element{
     return (
-        <div>Success</div>
+        <div>
+            {props.selectedResources.map((r:Resource) => <div>{r.Name}</div>)}
+        </div>
     );
 }
 

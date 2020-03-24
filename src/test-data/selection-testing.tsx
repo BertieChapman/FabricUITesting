@@ -1,5 +1,5 @@
 import React from 'react';
-import {DetailsRow, DetailsList, IDetailsRowProps} from 'office-ui-fabric-react/lib/DetailsList'
+import {DetailsRow, DetailsList, IDetailsRowProps, IColumn} from 'office-ui-fabric-react/lib/DetailsList'
 import {Selection, SelectionMode, SelectionZone} from 'office-ui-fabric-react/lib/Selection';
 import { Resource } from '../models/resource';
 import {test_resources} from './resources';
@@ -15,6 +15,19 @@ interface ITestProps {
 export default class SelectionTestComponent extends React.Component<ITestProps, any> {
 
     private _selection: Selection;
+    private _columns: IColumn[] = [
+        {
+            key: "Name",
+            minWidth: 200,
+            name: "Name",
+            fieldName: "name"
+        }
+    ]
+
+
+    componentWillReceiveProps(props: ITestProps){
+        this._selection.setItems(props.resources)
+    }
 
     constructor(props: ITestProps){
         super(props);
@@ -27,64 +40,40 @@ export default class SelectionTestComponent extends React.Component<ITestProps, 
 
     }
 
-    private _onRenderRow(rowProps: IDetailsRowProps|undefined){
-        
+    private _onRenderCell = (nestingDepth?: number, item?: Resource, index?: number) =>{
         return (
             <DetailsRow
-                itemIndex={rowProps!.itemIndex}
-                item={rowProps!.item}
-                selection={this._selection}
-            />
-        );
-    }
-
-    private _onRenderCell(nestingDepth?: number, item?: any, index?: number){
-        return (
-            <DetailsRow
-                groupNestingDepth={nestingDepth}
+                groupNestingDepth={0}
                 itemIndex={index!}
-                item={item}
+                item={this.props.resources[0]}
+                columns={this._columns}
                 selection={this._selection}
-                columns={[{
-                    key:'name',
-                    minWidth: 50,
-                    fieldName: 'Name',
-                    name:'name'
-                }]}
             />
         );
     }
 
     render(){
         return (
-            // <SelectionZone
-            //     selection={this._selection}
-            // >
-            //     <DetailsList
-            //         items={this.props.resources}
-            //         onRenderRow={this._onRenderRow.bind(this)}
-            //         selection={this._selection}
-            //     >
-
-            //     </DetailsList>
-            // </SelectionZone>
             <SelectionZone
                 selection={this._selection}
             >
-                    <GroupedList
-                        items={this.props.resources}
-                        onRenderCell={this._onRenderCell.bind(this)}
-                        selection={this._selection}
-                        groups={[{
-                            key:'group1',
-                            startIndex: 0,
-                            count: 5,
-                            name: 'group1'
-                        }]}
-                    >
-    
+                <GroupedList
+                    items={this.props.resources}
+                    onRenderCell={this._onRenderCell}
+                    selection={this._selection}
+                >
                 </GroupedList>
             </SelectionZone>
+            // <SelectionZone
+            //     selection={this._selection}
+            // >
+                    // <GroupedList
+                    //     items={this.props.resources}
+                    //     onRenderCell={this._onRenderCell}
+                    //     selection={this._selection}
+
+                    // />
+            // </SelectionZone>
         );
     }
 }
