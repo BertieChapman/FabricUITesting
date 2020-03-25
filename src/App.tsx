@@ -1,11 +1,10 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {Stack, StackItem} from 'office-ui-fabric-react/lib/Stack';
 import { ResourceList } from './components/resource-list/resource-list';
 import ResourceService from './services/resource-service';
 import { Resource } from './models/resource';
 import BookingResourceList from './components/booking/booking-resource-list/booking-resource-list';
-import SelectionTestComponent from './test-data/selection-testing';
 
 interface IAppState {
   resources: Resource[],
@@ -28,13 +27,19 @@ class App extends React.Component<void, IAppState> {
   render(){
     return (
       <div className="App">
-         <ResourceList
-          resources = {this.state.resources}
-          onResourceSelectionChange = {(resources => this.onSelectedResourcesChange(resources))}
-        />
-        <BookingResourceList 
-        selectedResources={this.state.selectedResources}
-        />
+        <Stack horizontal={true}>
+          <StackItem grow={1}>
+            <ResourceList
+              resources = {this.state.resources}
+              onResourceSelectionChange = {(resources => this.onSelectedResourcesChange(resources))}
+            />
+          </StackItem>
+          <StackItem grow={1}>
+            <BookingResourceList 
+              selectedResources={this.state.selectedResources}
+            />
+          </StackItem>
+        </Stack>
       </div>
     );
   }

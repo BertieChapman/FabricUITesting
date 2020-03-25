@@ -1,3 +1,8 @@
 .not-available, .not-available:hover {
     color: #cccccc;
 }
+
+#resource-list {
+    position: relative;
+    width: 100%;
+}
