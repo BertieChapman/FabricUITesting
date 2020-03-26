@@ -14,4 +14,4 @@ function BookingResourceList(props: IBookingResourceListProps): JSX.Element{
     );
 }
 
-export default BookingResourceList;
+export { BookingResourceList };

@@ -1,6 +1,5 @@
 import React from "react";
 import { Resource } from "../../models/resource";
-import {initializeIcons} from "office-ui-fabric-react/lib/Icons";
 import {SelectionZone} from "office-ui-fabric-react/lib/Selection";
 import {ScrollablePane} from "office-ui-fabric-react/lib/ScrollablePane";
 import {IColumn, DetailsRow, Selection, SelectionMode} from "office-ui-fabric-react/lib/DetailsList";
@@ -9,7 +8,6 @@ import "./resource-list.css";
 
 import {sortBy} from 'lodash';
 
-initializeIcons();
 
 const ResourceListColumns: IColumn[] = [
     {key: "1", fieldName: "Name", minWidth: 50, name:"name"}
@@ -19,8 +17,7 @@ type ItemCounts = {[item:string]: number};
 
 interface IResourceListProps {
     resources: Resource[],
-    onResourceSelectionChange: (resource: Resource[]) => void,
-    initialSelected: Resource[] | undefined
+    onResourceSelectionChange: (resource: Resource[]) => void
 }
 
 export class ResourceList extends React.Component<IResourceListProps, any> {

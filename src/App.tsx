@@ -1,18 +1,21 @@
 // React
+import React from 'react';
 // Lodash
 import { groupBy } from 'lodash';
 // Fabric UI
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
-import React from 'react';
+import {initializeIcons} from "office-ui-fabric-react/lib/Icons";
 // CSS
 import './App.css';
 // Components 
-import { Group, GroupAggregateList } from './components/aggregate-group-list/aggregate-group-list';
+import {BookingComponent} from './components/booking/booking-component';
 import { ResourceList } from './components/resource-list/resource-list';
 // Models
 import { Resource } from './models/resource';
 // Services
 import ResourceService from './services/resource-service';
+
+initializeIcons();
 
 interface IAppState {
   resources: Resource[],
@@ -35,7 +38,7 @@ class App extends React.Component<void, IAppState> {
   render() {
     return (
       <div className="App">
-        <Stack horizontal={true}>
+        <Stack horizontal={true} className="main-stack">
           <StackItem grow={1}>
             <ResourceList
               resources={this.state.resources}
@@ -43,15 +46,7 @@ class App extends React.Component<void, IAppState> {
             />
           </StackItem>
           <StackItem grow={1}>
-            <GroupAggregateList
-              items={this.state.selectedResources}
-              aggregate={{
-                aggregateFunction: this.bookingRowAggregateFunction,
-                aggregateName: "Count"
-              }}
-              groupFunction={this.bookingRowGroupFunction}
-              onRowRender={this.onBookingRowRender}
-            />
+            <BookingComponent selectedResources={this.state.selectedResources}/>
           </StackItem>
         </Stack>
       </div>
@@ -62,25 +57,6 @@ class App extends React.Component<void, IAppState> {
     this.setState({
       selectedResources: resources,
     })
-  }
-
-  private onBookingRowRender(group: Group<Resource>, value: number){
-    return (
-      <div>{group?.groupName}  x{value}</div>
-    );
-  }
-
-  private bookingRowGroupFunction(items: Resource[]){
-    let grouped = groupBy(items, (r: Resource) => r.Name)
-    let groupArray: Group<Resource>[] = []
-    Object.keys(grouped).forEach(key => {
-      groupArray.push({ groupName: key, items: grouped[key] })
-    })
-    return groupArray;
-  }
-
-  private bookingRowAggregateFunction(items: Resource[]){
-    return items.length;
   }
 }
 
