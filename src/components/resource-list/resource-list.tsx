@@ -1,9 +1,12 @@
 import React from "react";
+// eslint-disable-next-line no-unused-vars
 import { Resource } from "../../models/resource";
 import {SelectionZone} from "office-ui-fabric-react/lib/Selection";
 import {ScrollablePane} from "office-ui-fabric-react/lib/ScrollablePane";
 import {Sticky, StickyPositionType} from 'office-ui-fabric-react/lib/Sticky';
+// eslint-disable-next-line no-unused-vars
 import {IColumn, DetailsRow, Selection, SelectionMode} from "office-ui-fabric-react/lib/DetailsList";
+// eslint-disable-next-line no-unused-vars
 import { GroupedList, IGroup } from "office-ui-fabric-react/lib/GroupedList";
 import "./resource-list.css";
 
@@ -50,7 +53,7 @@ export class ResourceList extends React.Component<IResourceListProps, any> {
 
     }
 
-    componentDidUpdate(prevProps: IResourceListProps){
+    componentDidUpdate(){
         this._groupItems();
         if(this._initialPopulation){
             console.log("Initial population");

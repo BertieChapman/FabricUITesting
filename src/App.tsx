@@ -1,7 +1,5 @@
 // React
 import React from 'react';
-// Lodash
-import { groupBy } from 'lodash';
 // Fabric UI
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import {initializeIcons} from "office-ui-fabric-react/lib/Icons";
@@ -11,6 +9,7 @@ import './App.css';
 import {BookingComponent} from './components/booking/booking-component';
 import { ResourceList } from './components/resource-list/resource-list';
 // Models
+// eslint-disable-next-line no-unused-vars
 import { Resource } from './models/resource';
 // Services
 import ResourceService from './services/resource-service';
