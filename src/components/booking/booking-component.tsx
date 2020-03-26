@@ -5,11 +5,14 @@ import {groupBy} from 'lodash';
 import { Resource } from '../../models/resource';
 
 // Fabric UI
-import {Button} from 'office-ui-fabric-react/lib/Button';
+import {PrimaryButton, DefaultButton} from 'office-ui-fabric-react/lib/Button';
 import {Stack, StackItem} from 'office-ui-fabric-react/lib/Stack';
 
 // Components 
 import {GroupAggregateList, Group} from '../aggregate-group-list/aggregate-group-list';
+
+// CSS
+import './booking-component.css'
 
 interface IBookingState {
     valid: boolean
@@ -46,13 +49,13 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
 
     render() {
         return (
-            <Stack>
+            <Stack className="booking-component-stack" verticalAlign={"center"}>
                 <StackItem>
                     <div className="booking-component-header">
                         <h1>New Booking</h1>
                     </div>
                     </StackItem>
-                <StackItem grow={1}>
+                <StackItem grow={1} className="resource-list">
                     <GroupAggregateList
                         items={this.props.selectedResources}
                         aggregate={{
@@ -61,11 +64,13 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
                         }}
                         groupFunction={this.bookingRowGroupFunction}
                         onRowRender={this.onBookingRowRender}
+                        
                     />
                 </StackItem>
-                <StackItem>
+                <StackItem align={"center"}>
                     <div className="booking-component-footer">
-                        <Button>Submit</Button>
+                        <DefaultButton>Cancel</DefaultButton>
+                        <PrimaryButton>Submit</PrimaryButton>
                     </div>
                 </StackItem>
             </Stack>

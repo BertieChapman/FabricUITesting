@@ -2,6 +2,7 @@ import React from "react";
 import { Resource } from "../../models/resource";
 import {SelectionZone} from "office-ui-fabric-react/lib/Selection";
 import {ScrollablePane} from "office-ui-fabric-react/lib/ScrollablePane";
+import {Sticky, StickyPositionType} from 'office-ui-fabric-react/lib/Sticky';
 import {IColumn, DetailsRow, Selection, SelectionMode} from "office-ui-fabric-react/lib/DetailsList";
 import { GroupedList, IGroup } from "office-ui-fabric-react/lib/GroupedList";
 import "./resource-list.css";
@@ -77,7 +78,7 @@ export class ResourceList extends React.Component<IResourceListProps, any> {
                 startIndex: count,
                 count: itemCounts[key],
                 name: key,
-                minWidth: 50,
+                minWidth: 300,
                 key: key
             }
             count += itemCounts[key];
@@ -118,8 +119,11 @@ export class ResourceList extends React.Component<IResourceListProps, any> {
 
     render(){
         return (
-            // <div className="resource-list">
+            <div id="resource-list">
                 <ScrollablePane>
+                    <Sticky stickyPosition={StickyPositionType.Header}>
+                    <h2 className="sticky-header">Resources</h2>
+                </Sticky>
                     <SelectionZone
                     selection={this._selection}>
                         <GroupedList
@@ -132,7 +136,7 @@ export class ResourceList extends React.Component<IResourceListProps, any> {
                         />
                     </SelectionZone>
                 </ScrollablePane>
-            // </div>
+            </div>
         );
     }
     

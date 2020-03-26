@@ -39,7 +39,7 @@ class App extends React.Component<void, IAppState> {
     return (
       <div className="App">
         <Stack horizontal={true} className="main-stack">
-          <StackItem grow={1}>
+          <StackItem>
             <ResourceList
               resources={this.state.resources}
               onResourceSelectionChange={(resources => this.onSelectedResourcesChange(resources))}
