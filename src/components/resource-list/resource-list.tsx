@@ -19,11 +19,13 @@ type ItemCounts = {[item:string]: number};
 
 interface IResourceListProps {
     resources: Resource[],
-    onResourceSelectionChange: (resource: Resource[]) => void;
+    onResourceSelectionChange: (resource: Resource[]) => void,
+    initialSelected: Resource[] | undefined
 }
 
 export class ResourceList extends React.Component<IResourceListProps, any> {
 
+    private _initialPopulation = true;
     private _items: Resource[] | undefined;
     private _groups: IGroup[] | undefined;
     private _columns: IColumn[] | undefined;
@@ -47,14 +49,18 @@ export class ResourceList extends React.Component<IResourceListProps, any> {
             });
         
         this._groupItems();
-        
+
     }
 
     componentDidUpdate(prevProps: IResourceListProps){
-        //if(!this._groups && this.props.resources && this.props.resources.length !== 0){
-
-            this._groupItems();
-        //}
+        this._groupItems();
+        if(this._initialPopulation){
+            console.log("Initial population");
+            let items = this.props.resources.filter(r => r.AlreadyInBooking);
+            console.log(items);
+            items.forEach(r => this._selection.setKeySelected(r.key.toString(), true, false));
+            this._initialPopulation = false;
+        }
     }
 
     private _getItemCounts = (resources: Resource[]) => {
