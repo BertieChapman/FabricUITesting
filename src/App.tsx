@@ -46,28 +46,11 @@ class App extends React.Component<void, IAppState> {
             <GroupAggregateList
               items={this.state.selectedResources}
               aggregate={{
-                aggregateFunction: (items: Resource[]) => {
-                  return items.length;
-                },
+                aggregateFunction: this.bookingRowAggregateFunction,
                 aggregateName: "Count"
               }}
-              groupFunction={
-                (items: Resource[]) => {
-                  let grouped = groupBy(items, (r: Resource) => r.Name)
-                  let groupArray: Group<Resource>[] = []
-                  Object.keys(grouped).forEach(key => {
-                    groupArray.push({ groupName: key, items: grouped[key] })
-                  })
-                  return groupArray;
-                }
-              }
-              onRowRender={
-                (group: Group<Resource>, value: number) => {
-                  return (
-                    <div>{group?.groupName} : {value}</div>
-                  );
-                }
-              }
+              groupFunction={this.bookingRowGroupFunction}
+              onRowRender={this.onBookingRowRender}
             />
           </StackItem>
         </Stack>
@@ -79,6 +62,25 @@ class App extends React.Component<void, IAppState> {
     this.setState({
       selectedResources: resources,
     })
+  }
+
+  private onBookingRowRender(group: Group<Resource>, value: number){
+    return (
+      <div>{group?.groupName}  x{value}</div>
+    );
+  }
+
+  private bookingRowGroupFunction(items: Resource[]){
+    let grouped = groupBy(items, (r: Resource) => r.Name)
+    let groupArray: Group<Resource>[] = []
+    Object.keys(grouped).forEach(key => {
+      groupArray.push({ groupName: key, items: grouped[key] })
+    })
+    return groupArray;
+  }
+
+  private bookingRowAggregateFunction(items: Resource[]){
+    return items.length;
   }
 }
 
