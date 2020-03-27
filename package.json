@@ -16,13 +16,14 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && replace-in-file \"<script src\" \"<script type='text/javascript' src\" ./build/index.html && replace-in-file \"<script>\" \"<script type='text/javascript'>\" ./build/index.html",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
+  "homepage": "./",
   "browserslist": {
     "production": [
       ">0.2%",
