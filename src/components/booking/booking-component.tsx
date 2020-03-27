@@ -19,7 +19,9 @@ interface IBookingState {
 }
 
 interface IBookingProps {
-    selectedResources: Resource[]
+    selectedResources: Resource[],
+    onSave: () => void,
+    onCancel: () => void
 }
 
 export class BookingComponent extends React.Component<IBookingProps, IBookingState> {
@@ -30,7 +32,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
 
     private onBookingRowRender(group: Group<Resource>, value: number) {
         return (
-            <div>{group?.groupName}  x{value}</div>
+            <div>{group.groupName}  x{value}</div>
         );
     }
 
@@ -69,8 +71,8 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
                 </StackItem>
                 <StackItem align={"center"}>
                     <div className="booking-component-footer">
-                        <DefaultButton>Cancel</DefaultButton>
-                        <PrimaryButton>Submit</PrimaryButton>
+                        <DefaultButton onClick={this.props.onCancel}>Cancel</DefaultButton>
+                        <PrimaryButton onClick={this.props.onSave}>Submit</PrimaryButton>
                     </div>
                 </StackItem>
             </Stack>

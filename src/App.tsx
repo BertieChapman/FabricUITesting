@@ -21,10 +21,18 @@ interface IAppState {
   selectedResources: Resource[]
 }
 
-class App extends React.Component<void, IAppState> {
+interface IAppProps {
+  redirects: {
+    onCancel: string,
+    onSave: string
+  }
+}
 
-  constructor(props: void) {
+class App extends React.Component<IAppProps, IAppState> {
+
+  constructor(props: IAppProps) {
     super(props);
+    console.log(this.props);
     this.state = {
       resources: [],
       selectedResources: []
@@ -45,7 +53,11 @@ class App extends React.Component<void, IAppState> {
             />
           </StackItem>
           <StackItem grow={1}>
-            <BookingComponent selectedResources={this.state.selectedResources}/>
+            <BookingComponent 
+              selectedResources={this.state.selectedResources}
+                onSave={this.onSaveBooking.bind(this)}
+                onCancel={this.onCancelBooking.bind(this)}
+              />
           </StackItem>
         </Stack>
       </div>
@@ -56,6 +68,16 @@ class App extends React.Component<void, IAppState> {
     this.setState({
       selectedResources: resources,
     })
+  }
+
+  onSaveBooking(){
+    console.log('Saving booking');
+    window.location.replace(this.props.redirects.onSave);
+  }
+
+  onCancelBooking(){
+    console.log('Cancelling booking');
+    window.location.replace(this.props.redirects.onCancel);
   }
 }
 
