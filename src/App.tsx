@@ -14,6 +14,7 @@ import {ProgressOverlayComponent} from './components/propress-overlay/progress-o
 import { Resource } from './models/resource';
 // Services
 import ResourceService from './services/resource-service';
+import { Booking } from './components/booking/booking';
 
 initializeIcons();
 
@@ -89,15 +90,20 @@ class App extends React.Component<IAppProps, IAppState> {
     })
   }
 
-  onSaveBooking(){
+  onSaveBooking(booking: Booking){
     console.log('Saving booking');
+    console.log(booking);
     this.setState({
       loading: true,
       loadingText: "Saving"
     })
     // demo saving function
     setTimeout(() => {
-      window.location.replace(this.props.redirects.onSave);
+      //window.location.replace(this.props.redirects.onSave);
+      this.setState({
+        loading: false,
+        loadingText: ""
+      })
     }, 2500)
   }
 

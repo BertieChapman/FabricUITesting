@@ -1,35 +1,40 @@
+
 import React from 'react';
 import {groupBy} from 'lodash';
 
 // Models 
 import { Resource } from '../../models/resource';
+import {Booking} from '../booking/booking';
 
 // Fabric UI
 import {PrimaryButton, DefaultButton} from 'office-ui-fabric-react/lib/Button';
 import {Stack, StackItem} from 'office-ui-fabric-react/lib/Stack';
-import {DatePicker} from 'office-ui-fabric-react/lib/DatePicker';
-import {Label} from 'office-ui-fabric-react/lib/Label';
 
 // Components 
 import {GroupAggregateList, Group} from '../aggregate-group-list/aggregate-group-list';
+import DatePicker, {validRange} from '../date-selector/date-selector';
 
 // CSS
 import './booking-component.css'
 
 interface IBookingState {
-    valid: boolean
+    valid: boolean,
+    dateFrom: Date,
+    dateTo: Date,
 }
 
 interface IBookingProps {
     selectedResources: Resource[],
-    onSave: () => void,
+    onSave: (booking: Booking) => void,
     onCancel: () => void
 }
 
 export class BookingComponent extends React.Component<IBookingProps, IBookingState> {
 
     state = {
-        valid: false
+        valid: false,
+        dateFrom: new Date(Date.now()),
+        dateTo: new Date(Date.now())
     }
 
     // Lifecycle methods /////////////////////////////////////////////////
@@ -44,7 +49,10 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     }
 
     shouldComponentUpdate(nextProps: IBookingProps, nextState: IBookingState) {
-        return nextProps.selectedResources.length !== this.props.selectedResources.length || nextState.valid !== this.state.valid
+        return (nextProps.selectedResources.length !== this.props.selectedResources.length 
+            || nextState.valid !== this.state.valid
+            || nextState.dateFrom !== this.state.dateFrom
+            || nextState.dateTo !== this.state.dateTo)
     } 
 
     // Render methods ////////////////////////////////////////////////////
@@ -63,21 +71,14 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
                     </div>
                 </StackItem>
                 <StackItem align="start">
-                    <Stack horizontal={true}>
-                        <StackItem>
-                            <Label>Date/Time From:</Label>
-                        </StackItem>
-                        <StackItem>
-                            <DatePicker/>
-                        </StackItem>
-                        <StackItem>
-                            <Label>Date/Time To:</Label>
-                        </StackItem>
-                        <StackItem>
-                            <DatePicker
-                            />
-                        </StackItem>
-                    </Stack>
+                    <DatePicker
+                        includeTimeFields={true}
+                        dateChangeHandler={this.onDateChange.bind(this)}
+                        dates={{
+                            dateFrom: this.state.dateFrom,
+                            dateTo: this.state.dateTo
+                        }}
+                    ></DatePicker>
                 </StackItem>
                 <StackItem grow={1} className="resource-list">
                     <GroupAggregateList
@@ -94,7 +95,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
                 <StackItem align={"center"}>
                     <div className="booking-component-footer">
                         <DefaultButton onClick={this.props.onCancel}>Cancel</DefaultButton>
-                        <PrimaryButton onClick={this.props.onSave} disabled={!this.state.valid}>Submit</PrimaryButton>
+                        <PrimaryButton onClick={this.onSave.bind(this)} disabled={!this.state.valid}>Submit</PrimaryButton>
                     </div>
                 </StackItem>
             </Stack>
@@ -118,13 +119,45 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     private validate(){
         let valid = true;
 
-        if(this.props.selectedResources.length === 0)
+        if(this.props.selectedResources.length === 0){
             valid = false;
+        }
+
+        // TODO: dont like that we already have whether its valid when the date changes
+        if(!validRange(this.state.dateFrom, this.state.dateTo)){
+            valid = false;
+        }
 
         this.setState({
             valid: valid
         });
     }
 
-    
+    private onSave(){
+
+
+        this.props.onSave(this.createBookingObject())
+    }
+
+    private onDateChange(dateFrom: Date, dateTo: Date, valid: boolean){
+        console.log(valid)
+
+        this.setState({
+            dateFrom: dateFrom,
+            dateTo: dateTo
+        })
+
+        this.validate();
+    }
+
+    private createBookingObject(): Booking{
+        const booking: Booking = {
+            title: "test",
+            dateTimeFrom: new Date(Date.now()),
+            dateTimeTo: new Date(Date.now()),
+            resources: this.props.selectedResources
+        }
+
+        return booking;
+    }
 }
