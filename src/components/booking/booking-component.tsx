@@ -30,23 +30,26 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
         valid: false
     }
 
+    // Lifecycle methods /////////////////////////////////////////////////
+    componentDidMount(){
+        this.validate();
+    }
+
+    componentDidUpdate(prevProps: IBookingProps){
+        if(prevProps.selectedResources.length !== this.props.selectedResources.length){
+            this.validate();
+        }
+    }
+
+    shouldComponentUpdate(nextProps: IBookingProps, nextState: IBookingState) {
+        return nextProps.selectedResources.length !== this.props.selectedResources.length || nextState.valid !== this.state.valid
+    } 
+
+    // Render methods ////////////////////////////////////////////////////
     private onBookingRowRender(group: Group<Resource>, value: number) {
         return (
             <div>{group.groupName}  x{value}</div>
         );
-    }
-
-    private bookingRowGroupFunction(items: Resource[]) {
-        let grouped = groupBy(items, (r: Resource) => r.Name)
-        let groupArray: Group<Resource>[] = []
-        Object.keys(grouped).forEach(key => {
-            groupArray.push({ groupName: key, items: grouped[key] })
-        })
-        return groupArray;
-    }
-
-    private bookingRowAggregateFunction(items: Resource[]) {
-        return items.length;
     }
 
     render() {
@@ -72,10 +75,37 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
                 <StackItem align={"center"}>
                     <div className="booking-component-footer">
                         <DefaultButton onClick={this.props.onCancel}>Cancel</DefaultButton>
-                        <PrimaryButton onClick={this.props.onSave}>Submit</PrimaryButton>
+                        <PrimaryButton onClick={this.props.onSave} disabled={!this.state.valid}>Submit</PrimaryButton>
                     </div>
                 </StackItem>
             </Stack>
         );
     }
+
+    ///////////////////////////////////////////////////////////////////////
+    private bookingRowGroupFunction(items: Resource[]) {
+        let grouped = groupBy(items, (r: Resource) => r.Name)
+        let groupArray: Group<Resource>[] = []
+        Object.keys(grouped).forEach(key => {
+            groupArray.push({ groupName: key, items: grouped[key] })
+        })
+        return groupArray;
+    }
+
+    private bookingRowAggregateFunction(items: Resource[]) {
+        return items.length;
+    }
+
+    private validate(){
+        let valid = true;
+
+        if(this.props.selectedResources.length === 0)
+            valid = false;
+
+        this.setState({
+            valid: valid
+        });
+    }
+
+    
 }
