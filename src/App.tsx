@@ -35,13 +35,18 @@ class App extends React.Component<IAppProps, IAppState> {
 
   constructor(props: IAppProps) {
     super(props);
-    console.log(this.props);
+
     this.state = {
       resources: [],
       selectedResources: [],
       loading: true,
       loadingText: "Loading..."
-    }
+    }  
+  }
+
+  // Lifecycle methods ///////////////////////////////////////////////////////
+
+  componentDidMount(){
     ResourceService.getResources().then(r => {
       this.setState(
         { 
@@ -51,6 +56,8 @@ class App extends React.Component<IAppProps, IAppState> {
         });
     });
   }
+
+  // Render methods //////////////////////////////////////////////////////////
 
   render() {
     return (
@@ -84,7 +91,14 @@ class App extends React.Component<IAppProps, IAppState> {
 
   onSaveBooking(){
     console.log('Saving booking');
-    window.location.replace(this.props.redirects.onSave);
+    this.setState({
+      loading: true,
+      loadingText: "Saving"
+    })
+    // demo saving function
+    setTimeout(() => {
+      window.location.replace(this.props.redirects.onSave);
+    }, 2500)
   }
 
   onCancelBooking(){
