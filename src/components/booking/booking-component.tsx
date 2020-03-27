@@ -7,6 +7,8 @@ import { Resource } from '../../models/resource';
 // Fabric UI
 import {PrimaryButton, DefaultButton} from 'office-ui-fabric-react/lib/Button';
 import {Stack, StackItem} from 'office-ui-fabric-react/lib/Stack';
+import {DatePicker} from 'office-ui-fabric-react/lib/DatePicker';
+import {Label} from 'office-ui-fabric-react/lib/Label';
 
 // Components 
 import {GroupAggregateList, Group} from '../aggregate-group-list/aggregate-group-list';
@@ -59,7 +61,24 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
                     <div className="booking-component-header">
                         <h1>New Booking</h1>
                     </div>
-                    </StackItem>
+                </StackItem>
+                <StackItem align="start">
+                    <Stack horizontal={true}>
+                        <StackItem>
+                            <Label>Date/Time From:</Label>
+                        </StackItem>
+                        <StackItem>
+                            <DatePicker/>
+                        </StackItem>
+                        <StackItem>
+                            <Label>Date/Time To:</Label>
+                        </StackItem>
+                        <StackItem>
+                            <DatePicker
+                            />
+                        </StackItem>
+                    </Stack>
+                </StackItem>
                 <StackItem grow={1} className="resource-list">
                     <GroupAggregateList
                         items={this.props.selectedResources}

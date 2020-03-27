@@ -8,6 +8,7 @@ import './App.css';
 // Components 
 import {BookingComponent} from './components/booking/booking-component';
 import { ResourceList } from './components/resource-list/resource-list';
+import {ProgressOverlayComponent} from './components/propress-overlay/progress-overlay-component'
 // Models
 // eslint-disable-next-line no-unused-vars
 import { Resource } from './models/resource';
@@ -18,7 +19,9 @@ initializeIcons();
 
 interface IAppState {
   resources: Resource[],
-  selectedResources: Resource[]
+  selectedResources: Resource[],
+  loading: boolean,
+  loadingText: string
 }
 
 interface IAppProps {
@@ -35,16 +38,24 @@ class App extends React.Component<IAppProps, IAppState> {
     console.log(this.props);
     this.state = {
       resources: [],
-      selectedResources: []
+      selectedResources: [],
+      loading: true,
+      loadingText: "Loading..."
     }
     ResourceService.getResources().then(r => {
-      this.setState({ resources: r });
+      this.setState(
+        { 
+          resources: r,
+          loading: false,
+          loadingText: ""
+        });
     });
   }
 
   render() {
     return (
       <div className="App">
+        
         <Stack horizontal={true} className="main-stack">
           <StackItem>
             <ResourceList
@@ -60,6 +71,7 @@ class App extends React.Component<IAppProps, IAppState> {
               />
           </StackItem>
         </Stack>
+        <ProgressOverlayComponent visible={this.state.loading} text={this.state.loadingText}/>
       </div>
     );
   }
