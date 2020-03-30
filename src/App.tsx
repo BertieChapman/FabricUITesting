@@ -6,7 +6,7 @@ import {initializeIcons} from "office-ui-fabric-react/lib/Icons";
 // CSS
 import './App.css';
 // Components 
-import {BookingComponent} from './components/booking/booking-component';
+import {BookingComponent, DateRange} from './components/booking/booking-component';
 import { ResourceList } from './components/resource-list/resource-list';
 import {ProgressOverlayComponent} from './components/propress-overlay/progress-overlay-component'
 // Models
@@ -35,7 +35,7 @@ interface IAppProps {
 class App extends React.Component<IAppProps, IAppState> {
 
   private _resourceService: ResourceService;
-  private _defaultDates = {dateFrom: new Date(new Date().setHours(new Date().getHours() === 0? 23 : new Date().getHours() - 1)), dateTo: new Date()}
+  private _defaultDates = {dateFrom: new Date(), dateTo: new Date(new Date().setHours(new Date().getHours() === 23? 0 : new Date().getHours() + 1))}
 
   constructor(props: IAppProps) {
     super(props);
@@ -81,6 +81,7 @@ class App extends React.Component<IAppProps, IAppState> {
                 onSave={this.onSaveBooking.bind(this)}
                 onCancel={this.onCancelBooking.bind(this)}
                 defaultDates={this._defaultDates}
+                onDateChange={this.onDateChange.bind(this)}
               />
           </StackItem>
         </Stack>
@@ -93,6 +94,20 @@ class App extends React.Component<IAppProps, IAppState> {
     this.setState({
       selectedResources: resources,
     })
+  }
+
+  async onDateChange(dates: DateRange, valid: boolean){
+
+    let {dateFrom, dateTo} = dates;
+
+    if(valid){
+      let resources = await this._resourceService.getResourcesAvailable(dateFrom, dateTo);
+      this.setState(
+        {
+          resources
+        }
+      )
+    }
   }
 
   onSaveBooking(booking: Booking){

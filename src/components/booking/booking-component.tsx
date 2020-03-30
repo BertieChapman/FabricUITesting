@@ -17,6 +17,8 @@ import DatePicker, {validRange} from '../date-selector/date-selector';
 // CSS
 import './booking-component.css'
 
+export type DateRange = {dateFrom: Date, dateTo: Date};
+
 interface IBookingState {
     valid: boolean,
     dateFrom: Date,
@@ -27,7 +29,8 @@ interface IBookingProps {
     selectedResources: Resource[],
     onSave: (booking: Booking) => void,
     onCancel: () => void,
-    defaultDates: {dateFrom: Date, dateTo: Date}
+    defaultDates: DateRange,
+    onDateChange?: (dates: DateRange, valid: boolean) => void
 }
 
 export class BookingComponent extends React.Component<IBookingProps, IBookingState> {
@@ -142,13 +145,16 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
 
     private onDateChange(dateFrom: Date, dateTo: Date, valid: boolean){
         console.log(valid)
-
+       
         this.setState({
-            dateFrom: dateFrom,
-            dateTo: dateTo
+            dateFrom,
+            dateTo
         })
 
         this.validate();
+        if(this.props.onDateChange){
+            this.props.onDateChange({dateFrom, dateTo}, valid);
+        }
     }
 
     private createBookingObject(): Booking{
