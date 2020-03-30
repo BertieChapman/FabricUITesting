@@ -36,7 +36,7 @@ const hours: IDropdownOption[] = [
     {key: 6, text: "6"},
     {key: 7, text: "7"},
     {key: 8, text: "8"},
-    {key: 9, text: "8"},
+    {key: 9, text: "9"},
     {key: 10, text: "10"},
     {key: 11, text: "11"},
     {key: 12, text: "12"},
