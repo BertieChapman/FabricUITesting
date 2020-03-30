@@ -34,8 +34,12 @@ interface IAppProps {
 
 class App extends React.Component<IAppProps, IAppState> {
 
+  private _resourceService: ResourceService;
+  private _defaultDates = {dateFrom: new Date(new Date().setHours(new Date().getHours() === 0? 23 : new Date().getHours() - 1)), dateTo: new Date()}
+
   constructor(props: IAppProps) {
     super(props);
+    this._resourceService = new ResourceService();
 
     this.state = {
       resources: [],
@@ -48,7 +52,7 @@ class App extends React.Component<IAppProps, IAppState> {
   // Lifecycle methods ///////////////////////////////////////////////////////
 
   componentDidMount(){
-    ResourceService.getResources().then(r => {
+    this._resourceService.getResourcesAvailable(this._defaultDates.dateFrom, this._defaultDates.dateTo).then(r => {
       this.setState(
         { 
           resources: r,
@@ -73,9 +77,10 @@ class App extends React.Component<IAppProps, IAppState> {
           </StackItem>
           <StackItem grow={1}>
             <BookingComponent 
-              selectedResources={this.state.selectedResources}
+                selectedResources={this.state.selectedResources}
                 onSave={this.onSaveBooking.bind(this)}
                 onCancel={this.onCancelBooking.bind(this)}
+                defaultDates={this._defaultDates}
               />
           </StackItem>
         </Stack>

@@ -26,15 +26,16 @@ interface IBookingState {
 interface IBookingProps {
     selectedResources: Resource[],
     onSave: (booking: Booking) => void,
-    onCancel: () => void
+    onCancel: () => void,
+    defaultDates: {dateFrom: Date, dateTo: Date}
 }
 
 export class BookingComponent extends React.Component<IBookingProps, IBookingState> {
 
     state = {
         valid: false,
-        dateFrom: new Date(Date.now()),
-        dateTo: new Date(Date.now())
+        dateFrom: this.props.defaultDates.dateFrom,
+        dateTo: this.props.defaultDates.dateTo
     }
 
     // Lifecycle methods /////////////////////////////////////////////////
