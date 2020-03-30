@@ -115,7 +115,7 @@ export class ResourceList extends React.Component<IResourceListProps, any> {
             columns={ResourceListColumns}
             selectionMode={SelectionMode.multiple}
             selection={this._selection}
-            className={!item?.Available? "not-available" : undefined}
+            className={item!.Available? undefined : "not-available"}
           />
         );
     }
